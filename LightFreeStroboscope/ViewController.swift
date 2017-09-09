@@ -40,42 +40,29 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
 
 
+    @IBAction func rightSwipe(_ sender: UISwipeGestureRecognizer) {
+    }
+    @IBAction func leftSwipe(_ sender: UISwipeGestureRecognizer) {
+    }
+
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
         
         let translation = sender.translation(in: MainView)
-        sender.setTranslation(translation, in: MainView)
-//        let velocity = sender.velocity(in: MainView)
+        sender.setTranslation(CGPoint(), in: MainView)
+
+        let velocity = sender.velocity(in: MainView)
 //        print("velocity")
-//        print(velocity.y)
+//        print(velocity.x)
         
         
         
 //        print("translation y")
 //        print(translation.y)
-
-        if abs(translation.x) < 10 {
-            if abs(translation.y) < 20 {
-                oldtransy=0
-            }
-            refreshRate+=(-1*(Float(translation.y)-oldtransy))
-            oldtransy = Float(translation.y)
-            let output = (String(refreshRate) + "Hz")
-            hertzLabel.text = output
-            doneSlide = true
-        } else if translation.x > 100 && doneSlide {
-            doneSlide = false
-            refreshRate *= 2
-            let output = (String(refreshRate) + "Hz")
-            hertzLabel.text = output
-        } else if translation.x < -100 && doneSlide {
-            doneSlide = false
-            refreshRate/=2
-            let output = (String(refreshRate) + "Hz")
-            hertzLabel.text = output
-        }
         
-       
 
+        refreshRate += -1*(Float(translation.y))
+        let output = (String(refreshRate) + "Hz")
+        hertzLabel.text = output
     }
 
 

@@ -44,6 +44,8 @@
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="pb9-wJ-OAG" appends="YES" id="n5w-aV-qEd"/>
+                            <outletCollection property="gestureRecognizers" destination="5Ec-yW-E17" appends="YES" id="gSL-oK-TYM"/>
+                            <outletCollection property="gestureRecognizers" destination="iAh-zg-Kib" appends="YES" id="orf-bl-NHs"/>
                         </connections>
                     </view>
                     <connections>
@@ -58,6 +60,16 @@
                         <action selector="panChangeRate:" destination="BYZ-38-t0r" id="a5S-jf-8oJ"/>
                     </connections>
                 </panGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="5Ec-yW-E17">
+                    <connections>
+                        <action selector="leftSwipe:" destination="BYZ-38-t0r" id="RuV-j1-ozY"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="iAh-zg-Kib">
+                    <connections>
+                        <action selector="rightSwipe:" destination="BYZ-38-t0r" id="uXd-Vc-XFq"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="61.600000000000001" y="49.025487256371818"/>
         </scene>
