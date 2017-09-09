@@ -18,8 +18,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet var panRecog: UIPanGestureRecognizer!
     
     var minandmax: AVFrameRateRange!
-    var min: Double = 0.0
-    var max: Double = 0.0
     @IBOutlet weak var rpmLabel: UILabel!
     @IBOutlet weak var hertzLabel: UILabel!
     var lastDate = Date().timeIntervalSince1970
@@ -29,9 +27,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        minandmax = captureDevice.activeFormat.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
-        min = (minandmax?.minFrameRate)!
-        max = (minandmax?.maxFrameRate)!
         hertzLabel.layer.cornerRadius = 5
         rpmLabel.layer.cornerRadius = 5
         setupCameraSession()
@@ -48,25 +43,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
 
     @IBAction func rightSwipe(_ sender: UISwipeGestureRecognizer) {
-        print("called r")
-        if refreshRate * 2 < max{
-            refreshRate *= 2
-            updateLabels(hertz: refreshRate)
-        } else {
-            refreshRate = max
-            updateLabels(hertz: refreshRate)
-        }
+        changeRefresh(hertz: refreshRate * 2)
     }
     
     @IBAction func leftSwipe(_ sender: UISwipeGestureRecognizer) {
-        print("called l")
-        if refreshRate/2 > min{
-            refreshRate /= 2
-            updateLabels(hertz: refreshRate)
-        } else {
-            refreshRate = min
-            updateLabels(hertz: refreshRate)
-        }
+        changeRefresh(hertz: refreshRate / 2)
     }
 
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
@@ -75,21 +56,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         sender.setTranslation(CGPoint(), in: self.view)
 
         let velocity = sender.velocity(in: self.view)
-        print("velocity \(velocity.y)")
         
-        
-        
-        print("translation y \(translation.y)")
-        
-        let nextrate = refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 64)) / 100, -Double(translation.y))
-        
-        if nextrate < min {
-            changeRefresh(hertz: min)
-        } else if nextrate > max {
-            changeRefresh(hertz: max)
-        } else {
-            changeRefresh(hertz: nextrate)
-        }
+        changeRefresh(hertz: refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 64)) / 100, -Double(translation.y)))
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -132,6 +100,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 let conn = dataOutput.connection(withMediaType: AVFoundation.AVMediaTypeVideo)
                 conn?.videoOrientation = .portrait
                 try captureDevice.lockForConfiguration()
+                for format in captureDevice.formats {
+                    let frmt = format as! AVCaptureDeviceFormat
+                    if (frmt.videoSupportedFrameRateRanges as! [AVFrameRateRange])[0].maxFrameRate >= 120 && CMFormatDescriptionGetMediaSubType(frmt.formatDescription) == 875704422 {
+                        captureDevice.activeFormat = frmt
+                    }
+                }
                 print(captureDevice.iso)
                 captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
                 captureDevice.activeVideoMaxFrameDuration = CMTimeMake(1, 6)
@@ -152,19 +126,32 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func changeRefresh(hertz: Double) {
-        refreshRate = hertz
-        updateLabels(hertz: hertz)
+        let (min, max) = getMinMaxFrameRate()
+        var newHertz = hertz
+        if hertz <= min {
+            newHertz = min
+        } else if hertz >= max {
+            newHertz = max
+        }
+        
+        refreshRate = newHertz
+        updateLabels(hertz: newHertz)
         do {
             try captureDevice.lockForConfiguration()
             print(captureDevice.iso)
             captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
-            captureDevice.activeVideoMaxFrameDuration = CMTimeMake(100, Int32(hertz * 100))
-            captureDevice.activeVideoMinFrameDuration = CMTimeMake(100, Int32(hertz * 100))
+            captureDevice.activeVideoMaxFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
+            captureDevice.activeVideoMinFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
             captureDevice.unlockForConfiguration()
         }
         catch let error as NSError {
             NSLog("\(error), \(error.localizedDescription)")
         }
+    }
+    
+    func getMinMaxFrameRate() -> (Double, Double) {
+        minandmax = captureDevice.activeFormat.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
+        return ((minandmax?.minFrameRate)!, (minandmax?.maxFrameRate)!)
     }
     
     func updateLabels(hertz: Double) {
