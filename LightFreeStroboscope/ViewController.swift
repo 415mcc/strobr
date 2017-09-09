@@ -17,7 +17,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet var MainView: UIView!
     let panRec = UIPanGestureRecognizer()
 
+    
+    @IBOutlet weak var rpmLabel: UILabel!
+    @IBOutlet weak var hertzLabel: UILabel!
     var lastDate = Date().timeIntervalSince1970
+    var oldtransy:Float = 0
     
     lazy var captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) as AVCaptureDevice
     
@@ -34,7 +38,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         cameraSession.startRunning()
     }
     
-    var oldtransy:Float = 0
+
 
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
         
@@ -54,18 +58,19 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             }
             refreshRate+=(-1*(Float(translation.y)-oldtransy))
             oldtransy = Float(translation.y)
-            print(refreshRate)
+            let output = (String(refreshRate) + "Hz")
+            hertzLabel.text = output
             doneSlide = true
         } else if(translation.x>100 && doneSlide){
             doneSlide = false
-            print("double")
             refreshRate *= 2
-            print(refreshRate)
+            let output = (String(refreshRate) + "Hz")
+            hertzLabel.text = output
         } else if (translation.x < -100 && doneSlide){
             doneSlide = false
-            print("half")
             refreshRate/=2
-            print(refreshRate)
+            let output = (String(refreshRate) + "Hz")
+            hertzLabel.text = output
         }
         
        
