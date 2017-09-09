@@ -22,8 +22,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet weak var hertzLabel: UILabel!
     var lastDate = Date().timeIntervalSince1970
     var oldtransy:Float = 0
+    var format240: AVCaptureDeviceFormat?
+    var captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) as AVCaptureDevice
+    var formatDef: AVCaptureDeviceFormat!
     
-    lazy var captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) as AVCaptureDevice
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +35,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         setupCameraSession()
         self.view.layer.insertSublayer(previewLayer, at: 0)
         cameraSession.startRunning()
-        changeRefresh(hertz: 14.11)
+        changeRefresh(hertz: 10)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -83,6 +86,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func setupCameraSession() {
         do {
+            formatDef = captureDevice.activeFormat
             let deviceInput = try AVCaptureDeviceInput(device: captureDevice)
             
             cameraSession.beginConfiguration()
@@ -102,11 +106,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 try captureDevice.lockForConfiguration()
                 for format in captureDevice.formats {
                     let frmt = format as! AVCaptureDeviceFormat
-                    if (frmt.videoSupportedFrameRateRanges as! [AVFrameRateRange])[0].maxFrameRate >= 120 && CMFormatDescriptionGetMediaSubType(frmt.formatDescription) == 875704422 {
+                    if (frmt.videoSupportedFrameRateRanges as! [AVFrameRateRange])[0].maxFrameRate == 120 && CMFormatDescriptionGetMediaSubType(frmt.formatDescription) == 875704422 {
                         captureDevice.activeFormat = frmt
+                        formatDef = frmt
+                    } else if (frmt.videoSupportedFrameRateRanges as! [AVFrameRateRange])[0].maxFrameRate == 240 && CMFormatDescriptionGetMediaSubType(frmt.formatDescription) == 875704422 {
+                        format240 = frmt
                     }
+                    
                 }
-                print(captureDevice.iso)
                 captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
                 captureDevice.activeVideoMaxFrameDuration = CMTimeMake(1, 6)
                 captureDevice.activeVideoMinFrameDuration = CMTimeMake(1, 6)
@@ -131,14 +138,22 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         if hertz <= min {
             newHertz = min
         } else if hertz >= max {
-            newHertz = max
+            if format240 == nil {
+                newHertz = max
+            } else if hertz >= 240 {
+                newHertz = 240
+            }
         }
         
         refreshRate = newHertz
         updateLabels(hertz: newHertz)
         do {
             try captureDevice.lockForConfiguration()
-            print(captureDevice.iso)
+            if captureDevice.activeFormat == formatDef && newHertz > 120 {
+                captureDevice.activeFormat = format240
+            } else if captureDevice.activeFormat == format240 && newHertz <= 120 {
+                captureDevice.activeFormat = formatDef
+            }
             captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
             captureDevice.activeVideoMaxFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
             captureDevice.activeVideoMinFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
@@ -150,7 +165,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func getMinMaxFrameRate() -> (Double, Double) {
-        minandmax = captureDevice.activeFormat.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
+        minandmax = formatDef.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
         return ((minandmax?.minFrameRate)!, (minandmax?.maxFrameRate)!)
     }
     
