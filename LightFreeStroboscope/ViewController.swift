@@ -34,7 +34,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         cameraSession.startRunning()
     }
     
-
+    var oldtransy:Float = 0
 
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
         
@@ -42,10 +42,20 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 //        let velocity = sender.velocity(in: MainView)
 //        print("velocity")
 //        print(velocity.y)
+        
+        
+        
+//        print("translation y")
+//        print(translation.y)
 
         if (abs(translation.x) < 10){
-            refreshRate+=Float(-1*translation.y)
-           doneSlide = true
+            if(abs(translation.y)<20){
+                oldtransy=0
+            }
+            refreshRate+=(-1*(Float(translation.y)-oldtransy))
+            oldtransy = Float(translation.y)
+            print(refreshRate)
+            doneSlide = true
         } else if(translation.x>100 && doneSlide){
             doneSlide = false
             print("double")
