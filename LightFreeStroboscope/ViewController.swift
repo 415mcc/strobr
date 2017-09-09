@@ -9,13 +9,14 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var imageView: UIImageView!
-    var refreshRate: Float = 10
+    var refreshRate: Double = 10
     var doneSlide = true
-    @IBOutlet var MainView: UIView!
-    let panRec = UIPanGestureRecognizer()
+    @IBOutlet var leftSwipeRecog: UISwipeGestureRecognizer!
+    @IBOutlet var rightSwipeRecog: UISwipeGestureRecognizer!
+    @IBOutlet var panRecog: UIPanGestureRecognizer!
+    
 
     
     @IBOutlet weak var rpmLabel: UILabel!
@@ -27,42 +28,51 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        hertzLabel.layer.cornerRadius = 20
+        rpmLabel.layer.cornerRadius = 20
         setupCameraSession()
+        self.view.layer.insertSublayer(previewLayer, at: 0)
+        cameraSession.startRunning()
+        changeRefresh(hertz: 14.11)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        view.layer.insertSublayer(previewLayer, at: 0)
-        
-        cameraSession.startRunning()
     }
     
 
 
     @IBAction func rightSwipe(_ sender: UISwipeGestureRecognizer) {
+        print("called r")
+        refreshRate *= 2
+        updateLabels(hertz: refreshRate)
     }
+    
     @IBAction func leftSwipe(_ sender: UISwipeGestureRecognizer) {
+        print("called l")
+        refreshRate /= 2
+        updateLabels(hertz: refreshRate)
     }
 
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
         
-        let translation = sender.translation(in: MainView)
-        sender.setTranslation(CGPoint(), in: MainView)
+        let translation = sender.translation(in: self.view)
+        sender.setTranslation(CGPoint(), in: self.view)
 
-        let velocity = sender.velocity(in: MainView)
-//        print("velocity")
-//        print(velocity.x)
+        let velocity = sender.velocity(in: self.view)
+        print("velocity \(velocity.y)")
         
         
         
-//        print("translation y")
-//        print(translation.y)
+        print("translation y \(translation.y)")
         
 
-        refreshRate += -1*(Float(translation.y))
-        let output = (String(refreshRate) + "Hz")
-        hertzLabel.text = output
+        changeRefresh(hertz: refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y)))
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return (gestureRecognizer == self.leftSwipeRecog || gestureRecognizer == self.rightSwipeRecog) && otherGestureRecognizer == self.panRecog
     }
 
 
@@ -83,8 +93,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }()
     
     func setupCameraSession() {
-        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) as AVCaptureDevice
-        
         do {
             let deviceInput = try AVCaptureDeviceInput(device: captureDevice)
             
@@ -103,7 +111,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 let conn = dataOutput.connection(withMediaType: AVFoundation.AVMediaTypeVideo)
                 conn?.videoOrientation = .portrait
                 try captureDevice.lockForConfiguration()
-                captureDevice.exposureMode = .custom
                 print(captureDevice.iso)
                 captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
                 captureDevice.activeVideoMaxFrameDuration = CMTimeMake(1, 6)
@@ -121,6 +128,27 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         catch let error as NSError {
             NSLog("\(error), \(error.localizedDescription)")
         }
+    }
+    
+    func changeRefresh(hertz: Double) {
+        refreshRate = hertz
+        updateLabels(hertz: hertz)
+        do {
+            try captureDevice.lockForConfiguration()
+            print(captureDevice.iso)
+            captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
+            captureDevice.activeVideoMaxFrameDuration = CMTimeMake(100, Int32(hertz * 100))
+            captureDevice.activeVideoMinFrameDuration = CMTimeMake(100, Int32(hertz * 100))
+            captureDevice.unlockForConfiguration()
+        }
+        catch let error as NSError {
+            NSLog("\(error), \(error.localizedDescription)")
+        }
+    }
+    
+    func updateLabels(hertz: Double) {
+        hertzLabel.text = String(format: "%.2f Hz", hertz)
+        rpmLabel.text = String(format: "%.1f RPM", hertz * 60)
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {

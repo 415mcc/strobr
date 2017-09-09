@@ -21,14 +21,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Hz" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2c-Xv-gFL">
-                                <rect key="frame" x="151" y="20" width="89" height="52"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 RPM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="btb-Yo-yYO">
+                                <rect key="frame" x="125" y="80" width="125.5" height="52"/>
+                                <color key="backgroundColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="0.5" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Rpm" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="btb-Yo-yYO">
-                                <rect key="frame" x="133" y="80" width="125" height="52"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 Hz" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2c-Xv-gFL">
+                                <rect key="frame" x="133.5" y="20" width="108.5" height="52"/>
+                                <color key="backgroundColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="0.5" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -37,7 +39,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="btb-Yo-yYO" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="133" id="2py-1y-KBN"/>
+                            <constraint firstItem="K2c-Xv-gFL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ffe-L2-1oB"/>
                             <constraint firstItem="K2c-Xv-gFL" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="QwE-QW-uWv"/>
                             <constraint firstItem="btb-Yo-yYO" firstAttribute="top" secondItem="K2c-Xv-gFL" secondAttribute="bottom" constant="8" symbolic="YES" id="oMd-gx-KVI"/>
                             <constraint firstItem="K2c-Xv-gFL" firstAttribute="centerX" secondItem="btb-Yo-yYO" secondAttribute="centerX" id="xd3-v4-zVZ"/>
@@ -49,8 +51,10 @@
                         </connections>
                     </view>
                     <connections>
-                        <outlet property="MainView" destination="8bC-Xf-vdC" id="q2b-PP-5af"/>
                         <outlet property="hertzLabel" destination="K2c-Xv-gFL" id="NPG-hq-kif"/>
+                        <outlet property="leftSwipeRecog" destination="5Ec-yW-E17" id="hcP-zf-Fo0"/>
+                        <outlet property="panRecog" destination="pb9-wJ-OAG" id="HOK-Pd-hMb"/>
+                        <outlet property="rightSwipeRecog" destination="iAh-zg-Kib" id="Ud4-Le-35k"/>
                         <outlet property="rpmLabel" destination="btb-Yo-yYO" id="xvv-gx-ps6"/>
                     </connections>
                 </viewController>
@@ -58,16 +62,19 @@
                 <panGestureRecognizer minimumNumberOfTouches="1" id="pb9-wJ-OAG">
                     <connections>
                         <action selector="panChangeRate:" destination="BYZ-38-t0r" id="a5S-jf-8oJ"/>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="d2C-p4-AFi"/>
                     </connections>
                 </panGestureRecognizer>
                 <swipeGestureRecognizer direction="left" id="5Ec-yW-E17">
                     <connections>
                         <action selector="leftSwipe:" destination="BYZ-38-t0r" id="RuV-j1-ozY"/>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="ZnE-od-03E"/>
                     </connections>
                 </swipeGestureRecognizer>
                 <swipeGestureRecognizer direction="right" id="iAh-zg-Kib">
                     <connections>
                         <action selector="rightSwipe:" destination="BYZ-38-t0r" id="uXd-Vc-XFq"/>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="YhB-qR-bT9"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
