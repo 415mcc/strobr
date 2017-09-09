@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		726218FD1F64754D004D8929 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726218FC1F64754D004D8929 /* InfoViewController.swift */; };
 		A5F473311F638D03001843AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F473301F638D03001843AB /* AppDelegate.swift */; };
 		A5F473331F638D03001843AB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F473321F638D03001843AB /* ViewController.swift */; };
 		A5F473361F638D03001843AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5F473341F638D03001843AB /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		726218FC1F64754D004D8929 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		A5F4732D1F638D03001843AB /* LightFreeStroboscope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightFreeStroboscope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5F473301F638D03001843AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5F473321F638D03001843AB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			children = (
 				A5F473301F638D03001843AB /* AppDelegate.swift */,
 				A5F473321F638D03001843AB /* ViewController.swift */,
+				726218FC1F64754D004D8929 /* InfoViewController.swift */,
 				A5F473341F638D03001843AB /* Main.storyboard */,
 				A5F473371F638D03001843AB /* Assets.xcassets */,
 				A5F473391F638D03001843AB /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5F473331F638D03001843AB /* ViewController.swift in Sources */,
+				726218FD1F64754D004D8929 /* InfoViewController.swift in Sources */,
 				A5F473311F638D03001843AB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

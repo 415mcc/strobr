@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="byb-dx-8ni">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,11 +10,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Info View Controller-->
         <scene sceneID="POc-dh-YIi">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Dk-16-WpM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="byb-dx-8ni" sceneMemberID="viewController">
+                <viewController id="byb-dx-8ni" customClass="InfoViewController" customModule="LightFreeStroboscope" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="BAG-IF-stq"/>
                         <viewControllerLayoutGuide type="bottom" id="zMl-ap-8CC"/>
@@ -29,7 +29,7 @@
                                     <navigationItem title="How to use" id="TYC-dL-KVg">
                                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="done" id="ndd-Oh-p1F">
                                             <connections>
-                                                <segue destination="BYZ-38-t0r" kind="presentation" id="EE0-02-PHB"/>
+                                                <action selector="done:" destination="byb-dx-8ni" id="8k2-j6-N7F"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -55,7 +55,7 @@
                     </view>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="-714.39999999999998" y="27.436281859070466"/>
+            <point key="canvasLocation" x="-1194" y="-14"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -83,6 +83,14 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NTJ-7H-QYI">
+                                <rect key="frame" x="313" y="20" width="46" height="52"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Info"/>
+                                <connections>
+                                    <segue destination="byb-dx-8ni" kind="presentation" id="cuV-tu-8vN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -98,6 +106,7 @@
                             <outletCollection property="gestureRecognizers" destination="iAh-zg-Kib" appends="YES" id="orf-bl-NHs"/>
                         </connections>
                     </view>
+                    <navigationItem key="navigationItem" id="tRU-NP-Ahp"/>
                     <connections>
                         <outlet property="hertzLabel" destination="K2c-Xv-gFL" id="NPG-hq-kif"/>
                         <outlet property="leftSwipeRecog" destination="5Ec-yW-E17" id="hcP-zf-Fo0"/>
@@ -126,7 +135,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="62" y="43"/>
+            <point key="canvasLocation" x="61.600000000000001" y="42.728635682158924"/>
         </scene>
     </scenes>
 </document>
