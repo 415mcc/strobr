@@ -12,8 +12,8 @@ import AVFoundation
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
-
-    
+    var refreshRate: Float = 10
+    var doneSlide = true
     @IBOutlet var MainView: UIView!
     let panRec = UIPanGestureRecognizer()
 
@@ -25,7 +25,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         super.viewDidLoad()
         setupCameraSession()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -34,25 +34,35 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         cameraSession.startRunning()
     }
     
-    @IBAction func doubleRate(_ sender: Any) {
-        //double frame ra te
-    }
-    @IBAction func halfRate(_ sender: Any) {
-        //half frame rate
-    }
 
 
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
-        let translation = sender.translation(in: MainView)
-        let velocity = sender.velocity(in: MainView)
-        print("velocity")
-        print(velocity.y)
-        print("translation y")
-        print(translation.y)
         
+        let translation = sender.translation(in: MainView)
+//        let velocity = sender.velocity(in: MainView)
+//        print("velocity")
+//        print(velocity.y)
+
+        if (abs(translation.x) < 10){
+            refreshRate+=Float(-1*translation.y)
+           doneSlide = true
+        } else if(translation.x>100 && doneSlide){
+            doneSlide = false
+            print("double")
+            refreshRate *= 2
+            print(refreshRate)
+        } else if (translation.x < -100 && doneSlide){
+            doneSlide = false
+            print("half")
+            refreshRate/=2
+            print(refreshRate)
+        }
+        
+       
+
     }
 
-    
+
 
     lazy var cameraSession: AVCaptureSession = {
         let s = AVCaptureSession()

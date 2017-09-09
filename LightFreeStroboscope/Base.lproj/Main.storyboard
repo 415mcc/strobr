@@ -23,8 +23,6 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <connections>
-                            <outletCollection property="gestureRecognizers" destination="laU-ML-j09" appends="YES" id="jXA-Kf-yBb"/>
-                            <outletCollection property="gestureRecognizers" destination="4xw-pV-myF" appends="YES" id="y2e-m2-5qQ"/>
                             <outletCollection property="gestureRecognizers" destination="pb9-wJ-OAG" appends="YES" id="n5w-aV-qEd"/>
                         </connections>
                     </view>
@@ -33,22 +31,13 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="right" id="laU-ML-j09">
-                    <connections>
-                        <action selector="doubleRate:" destination="BYZ-38-t0r" id="h1z-ZM-fcC"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="left" id="4xw-pV-myF">
-                    <connections>
-                        <action selector="halfRate:" destination="BYZ-38-t0r" id="SX1-79-ymS"/>
-                    </connections>
-                </swipeGestureRecognizer>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="pb9-wJ-OAG">
                     <connections>
                         <action selector="panChangeRate:" destination="BYZ-38-t0r" id="a5S-jf-8oJ"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="62" y="49"/>
         </scene>
     </scenes>
 </document>
