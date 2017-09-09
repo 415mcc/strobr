@@ -33,7 +33,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        view.layer.addSublayer(previewLayer)
+        view.layer.insertSublayer(previewLayer, at: 0)
         
         cameraSession.startRunning()
     }
@@ -43,6 +43,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
         
         let translation = sender.translation(in: MainView)
+        sender.setTranslation(translation, in: MainView)
 //        let velocity = sender.velocity(in: MainView)
 //        print("velocity")
 //        print(velocity.y)
@@ -52,8 +53,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 //        print("translation y")
 //        print(translation.y)
 
-        if (abs(translation.x) < 10){
-            if(abs(translation.y)<20){
+        if abs(translation.x) < 10 {
+            if abs(translation.y) < 20 {
                 oldtransy=0
             }
             refreshRate+=(-1*(Float(translation.y)-oldtransy))
@@ -61,12 +62,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             let output = (String(refreshRate) + "Hz")
             hertzLabel.text = output
             doneSlide = true
-        } else if(translation.x>100 && doneSlide){
+        } else if translation.x > 100 && doneSlide {
             doneSlide = false
             refreshRate *= 2
             let output = (String(refreshRate) + "Hz")
             hertzLabel.text = output
-        } else if (translation.x < -100 && doneSlide){
+        } else if translation.x < -100 && doneSlide {
             doneSlide = false
             refreshRate/=2
             let output = (String(refreshRate) + "Hz")
