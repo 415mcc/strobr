@@ -17,17 +17,21 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet var rightSwipeRecog: UISwipeGestureRecognizer!
     @IBOutlet var panRecog: UIPanGestureRecognizer!
     
-
-    
+    var minandmax: AVFrameRateRange!
+    var min: Double = 0.0
+    var max: Double = 0.0
     @IBOutlet weak var rpmLabel: UILabel!
     @IBOutlet weak var hertzLabel: UILabel!
     var lastDate = Date().timeIntervalSince1970
     var oldtransy:Float = 0
     
     lazy var captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) as AVCaptureDevice
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        minandmax = captureDevice.activeFormat.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
+        min = (minandmax?.minFrameRate)!
+        max = (minandmax?.maxFrameRate)!
         hertzLabel.layer.cornerRadius = 20
         rpmLabel.layer.cornerRadius = 20
         setupCameraSession()
@@ -45,14 +49,24 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
     @IBAction func rightSwipe(_ sender: UISwipeGestureRecognizer) {
         print("called r")
-        refreshRate *= 2
-        updateLabels(hertz: refreshRate)
+        if refreshRate * 2 < max{
+            refreshRate *= 2
+            updateLabels(hertz: refreshRate)
+        } else {
+            refreshRate = max
+            updateLabels(hertz: refreshRate)
+        }
     }
     
     @IBAction func leftSwipe(_ sender: UISwipeGestureRecognizer) {
         print("called l")
-        refreshRate /= 2
-        updateLabels(hertz: refreshRate)
+        if refreshRate/2 > min{
+            refreshRate /= 2
+            updateLabels(hertz: refreshRate)
+        } else {
+            refreshRate = min
+            updateLabels(hertz: refreshRate)
+        }
     }
 
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
@@ -67,8 +81,20 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         print("translation y \(translation.y)")
         
-
-        changeRefresh(hertz: refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y)))
+        
+        if refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y)) > min{
+            if refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y)) < max{
+               changeRefresh(hertz: refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y))) 
+            }else{
+                changeRefresh(hertz: max)
+            }
+            
+            
+        } else {
+            changeRefresh(hertz: min)
+        }
+    
+        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
