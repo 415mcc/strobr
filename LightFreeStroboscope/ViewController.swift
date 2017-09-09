@@ -12,7 +12,11 @@ import AVFoundation
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
+
     
+    @IBOutlet var MainView: UIView!
+    let panRec = UIPanGestureRecognizer()
+
     var lastDate = Date().timeIntervalSince1970
     
     lazy var captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) as AVCaptureDevice
@@ -30,6 +34,26 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         cameraSession.startRunning()
     }
     
+    @IBAction func doubleRate(_ sender: Any) {
+        //double frame ra te
+    }
+    @IBAction func halfRate(_ sender: Any) {
+        //half frame rate
+    }
+
+
+    @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: MainView)
+        let velocity = sender.velocity(in: MainView)
+        print("velocity")
+        print(velocity.y)
+        print("translation y")
+        print(translation.y)
+        
+    }
+
+    
+
     lazy var cameraSession: AVCaptureSession = {
         let s = AVCaptureSession()
         s.sessionPreset = AVCaptureSessionPresetHigh
