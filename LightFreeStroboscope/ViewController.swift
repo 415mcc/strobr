@@ -32,8 +32,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         minandmax = captureDevice.activeFormat.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
         min = (minandmax?.minFrameRate)!
         max = (minandmax?.maxFrameRate)!
-        hertzLabel.layer.cornerRadius = 20
-        rpmLabel.layer.cornerRadius = 20
+        hertzLabel.layer.cornerRadius = 5
+        rpmLabel.layer.cornerRadius = 5
         setupCameraSession()
         self.view.layer.insertSublayer(previewLayer, at: 0)
         cameraSession.startRunning()
@@ -81,20 +81,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         print("translation y \(translation.y)")
         
+        let nextrate = refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 64)) / 100, -Double(translation.y))
         
-        if refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y)) > min{
-            if refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y)) < max{
-               changeRefresh(hertz: refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 8)) / 100, -Double(translation.y))) 
-            }else{
-                changeRefresh(hertz: max)
-            }
-            
-            
-        } else {
+        if nextrate < min {
             changeRefresh(hertz: min)
+        } else if nextrate > max {
+            changeRefresh(hertz: max)
+        } else {
+            changeRefresh(hertz: nextrate)
         }
-    
-        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
