@@ -16,12 +16,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet var leftSwipeRecog: UISwipeGestureRecognizer!
     @IBOutlet var rightSwipeRecog: UISwipeGestureRecognizer!
     @IBOutlet var panRecog: UIPanGestureRecognizer!
-    
+    var isHz = true
+
     var minandmax: AVFrameRateRange!
     var min: Double = 0.0
     var max: Double = 0.0
-    @IBOutlet weak var rpmLabel: UILabel!
-    @IBOutlet weak var hertzLabel: UILabel!
+    @IBOutlet var hertzLabel: UILabel!
+   
+    
     var lastDate = Date().timeIntervalSince1970
     var oldtransy:Float = 0
     
@@ -29,17 +31,22 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        hertzLabel.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(userDidTapLabel(tapGestureRecognizer:)))
+        hertzLabel.addGestureRecognizer(tapGesture)
         minandmax = captureDevice.activeFormat.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
         min = (minandmax?.minFrameRate)!
         max = (minandmax?.maxFrameRate)!
-        hertzLabel.layer.cornerRadius = 5
-        rpmLabel.layer.cornerRadius = 5
         setupCameraSession()
         self.view.layer.insertSublayer(previewLayer, at: 0)
         cameraSession.startRunning()
         changeRefresh(hertz: 14.11)
     }
 
+    func userDidTapLabel(tapGestureRecognizer: UITapGestureRecognizer) {
+        isHz =  !isHz
+        updateLabels(hertz: refreshRate)
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -168,8 +175,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func updateLabels(hertz: Double) {
-        hertzLabel.text = String(format: "%.2f Hz", hertz)
-        rpmLabel.text = String(format: "%.1f RPM", hertz * 60)
+        if isHz{
+            hertzLabel.text = String(format: "%.2f Hz", hertz)
+
+        } else {
+            hertzLabel.text = String(format: "%.2f RPM", hertz*60)
+        }
+        
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
