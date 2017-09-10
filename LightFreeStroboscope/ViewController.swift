@@ -18,8 +18,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet var panRecog: UIPanGestureRecognizer!
     var isHz = true
 
-    var minandmax: AVFrameRateRange!
-
     @IBOutlet weak var rpmLabel: UILabel!
     @IBOutlet weak var hertzLabel: UILabel!
     var lastDate = Date().timeIntervalSince1970
@@ -172,7 +170,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func getMinMaxFrameRate() -> (Double, Double) {
-        minandmax = formatDef.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
+        let minandmax = formatDef.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
         return ((minandmax?.minFrameRate)!, (minandmax?.maxFrameRate)!)
     }
     
