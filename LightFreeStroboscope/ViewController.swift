@@ -72,6 +72,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         return (gestureRecognizer == self.leftSwipeRecog || gestureRecognizer == self.rightSwipeRecog) && otherGestureRecognizer == self.panRecog
     }
 
+    @IBAction func FlashToggle(_ sender: Any) {
+        do {
+            try self.captureDevice.lockForConfiguration()
+            self.captureDevice.torchMode = self.captureDevice.torchMode == .on ? .off : .on
+            self.captureDevice.unlockForConfiguration()
+        } catch let error as NSError {
+            NSLog("\(error), \(error.localizedDescription)")
+        }
+    }
 
 
     lazy var cameraSession: AVCaptureSession = {
@@ -119,7 +128,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     }
                     
                 }
-                captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
+                captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 800), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
                 captureDevice.activeVideoMaxFrameDuration = CMTimeMake(1, 6)
                 captureDevice.activeVideoMinFrameDuration = CMTimeMake(1, 6)
                 captureDevice.unlockForConfiguration()
@@ -159,7 +168,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             } else if captureDevice.activeFormat == format240 && newHertz <= 120 {
                 captureDevice.activeFormat = formatDef
             }
-            captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 2000), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
+            captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 800), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
             captureDevice.activeVideoMaxFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
             captureDevice.activeVideoMinFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
             captureDevice.unlockForConfiguration()
