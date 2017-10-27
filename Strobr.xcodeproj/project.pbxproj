@@ -17,7 +17,7 @@
 
 /* Begin PBXFileReference section */
 		726218FC1F64754D004D8929 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
-		A5F4732D1F638D03001843AB /* LightFreeStroboscope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightFreeStroboscope.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5F4732D1F638D03001843AB /* Strobr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Strobr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5F473301F638D03001843AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5F473321F638D03001843AB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A5F473351F638D03001843AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -40,7 +40,7 @@
 		A5F473241F638D02001843AB = {
 			isa = PBXGroup;
 			children = (
-				A5F4732F1F638D03001843AB /* LightFreeStroboscope */,
+				A5F4732F1F638D03001843AB /* Strobr */,
 				A5F4732E1F638D03001843AB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,12 +48,12 @@
 		A5F4732E1F638D03001843AB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A5F4732D1F638D03001843AB /* LightFreeStroboscope.app */,
+				A5F4732D1F638D03001843AB /* Strobr.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A5F4732F1F638D03001843AB /* LightFreeStroboscope */ = {
+		A5F4732F1F638D03001843AB /* Strobr */ = {
 			isa = PBXGroup;
 			children = (
 				A5F473301F638D03001843AB /* AppDelegate.swift */,
@@ -64,15 +64,15 @@
 				A5F473391F638D03001843AB /* LaunchScreen.storyboard */,
 				A5F4733C1F638D03001843AB /* Info.plist */,
 			);
-			path = LightFreeStroboscope;
+			path = Strobr;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A5F4732C1F638D02001843AB /* LightFreeStroboscope */ = {
+		A5F4732C1F638D02001843AB /* Strobr */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A5F4733F1F638D03001843AB /* Build configuration list for PBXNativeTarget "LightFreeStroboscope" */;
+			buildConfigurationList = A5F4733F1F638D03001843AB /* Build configuration list for PBXNativeTarget "Strobr" */;
 			buildPhases = (
 				A5F473291F638D02001843AB /* Sources */,
 				A5F4732A1F638D02001843AB /* Frameworks */,
@@ -82,9 +82,9 @@
 			);
 			dependencies = (
 			);
-			name = LightFreeStroboscope;
+			name = Strobr;
 			productName = LightFreeStroboscope;
-			productReference = A5F4732D1F638D03001843AB /* LightFreeStroboscope.app */;
+			productReference = A5F4732D1F638D03001843AB /* Strobr.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,12 +99,12 @@
 				TargetAttributes = {
 					A5F4732C1F638D02001843AB = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 73TLTPUUAJ;
+						DevelopmentTeam = 5QL8SVZL7D;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = A5F473281F638D02001843AB /* Build configuration list for PBXProject "LightFreeStroboscope" */;
+			buildConfigurationList = A5F473281F638D02001843AB /* Build configuration list for PBXProject "Strobr" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -117,7 +117,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A5F4732C1F638D02001843AB /* LightFreeStroboscope */,
+				A5F4732C1F638D02001843AB /* Strobr */,
 			);
 		};
 /* End PBXProject section */
@@ -190,6 +190,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -240,6 +241,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -265,11 +267,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 73TLTPUUAJ;
-				INFOPLIST_FILE = LightFreeStroboscope/Info.plist;
+				DEVELOPMENT_TEAM = 5QL8SVZL7D;
+				INFOPLIST_FILE = "$(SRCROOT)/Strobr/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lachm.LightFreeStroboscope;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CQCumbers.Strobr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -279,11 +281,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 73TLTPUUAJ;
-				INFOPLIST_FILE = LightFreeStroboscope/Info.plist;
+				DEVELOPMENT_TEAM = 5QL8SVZL7D;
+				INFOPLIST_FILE = "$(SRCROOT)/Strobr/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lachm.LightFreeStroboscope;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CQCumbers.Strobr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -292,7 +294,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A5F473281F638D02001843AB /* Build configuration list for PBXProject "LightFreeStroboscope" */ = {
+		A5F473281F638D02001843AB /* Build configuration list for PBXProject "Strobr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A5F4733D1F638D03001843AB /* Debug */,
@@ -301,7 +303,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A5F4733F1F638D03001843AB /* Build configuration list for PBXNativeTarget "LightFreeStroboscope" */ = {
+		A5F4733F1F638D03001843AB /* Build configuration list for PBXNativeTarget "Strobr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A5F473401F638D03001843AB /* Debug */,
