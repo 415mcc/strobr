@@ -99,7 +99,7 @@
 				TargetAttributes = {
 					A5F4732C1F638D02001843AB = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 5QL8SVZL7D;
+						DevelopmentTeam = ZX885WV83E;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
@@ -280,11 +280,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5QL8SVZL7D;
+				DEVELOPMENT_TEAM = ZX885WV83E;
 				INFOPLIST_FILE = "$(SRCROOT)/Strobr/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.CQCumbers.Strobr;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CQCumbers.StrobrApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -295,11 +295,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5QL8SVZL7D;
+				DEVELOPMENT_TEAM = ZX885WV83E;
 				INFOPLIST_FILE = "$(SRCROOT)/Strobr/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.CQCumbers.Strobr;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CQCumbers.StrobrApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
