@@ -1,9 +1,6 @@
 //
 //  AppDelegate.swift
-//  LightFreeStroboscope
-//
-//  Created by Lachlan McCarty on 9/8/17.
-//  Copyright © 2017 Lachlan McCarty. All rights reserved.
+//  Strobr
 //
 
 import UIKit

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,14 +27,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="D89-FB-fvn">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xIg-Mc-NCZ">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D89-FB-fvn">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.94999999999999996"/>
+                                <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <textAttributes key="titleTextAttributes">
                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="20"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="How to use" id="TYC-dL-KVg">
                                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="ndd-Oh-p1F">
+                                            <color key="tintColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
                                                 <action selector="done:" destination="byb-dx-8ni" id="8k2-j6-N7F"/>
                                             </connections>
@@ -43,18 +54,18 @@
                                 </items>
                             </navigationBar>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hK3-5c-xfN">
-                                <rect key="frame" x="16" y="74" width="343" height="110"/>
+                                <rect key="frame" x="16" y="74" width="343" height="125"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="110" id="8gI-Da-Qd0"/>
+                                    <constraint firstAttribute="height" constant="125" id="8gI-Da-Qd0"/>
                                 </constraints>
-                                <string key="text">This app functions as a visual stroboscope. It allows you to vary the frame rate of captured video in order to stop motion and determine the frequency of periodic actions - like the flashing of fluorescent lights or the spinning of a wheel. Frame rates between </string>
+                                <string key="text">This app functions as a visual stroboscope. It allows you to vary the frame rate of captured video in order to stop motion and determine the frequency of periodic actions - like the flashing of fluorescent lights or the spinning of a wheel.</string>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Slide your finger up and down to vary the strobe speed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XYp-gt-P6U">
-                                <rect key="frame" x="22" y="188" width="319" height="45"/>
+                                <rect key="frame" x="22" y="203" width="319" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="XKQ-CQ-iB7"/>
                                 </constraints>
@@ -63,7 +74,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe left to halve the strobe speed." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uEB-S6-HuN">
-                                <rect key="frame" x="22" y="271" width="319" height="30"/>
+                                <rect key="frame" x="22" y="286" width="319" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="odx-fn-dJj"/>
                                 </constraints>
@@ -72,7 +83,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe right to double the strobe speed." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yif-oe-mfU">
-                                <rect key="frame" x="22" y="237" width="319" height="30"/>
+                                <rect key="frame" x="22" y="252" width="319" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="J95-mj-MP4"/>
                                 </constraints>
@@ -81,7 +92,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap the hertz display to switch between Hz and RPM." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p7h-ya-ekv">
-                                <rect key="frame" x="22" y="305" width="319" height="45"/>
+                                <rect key="frame" x="22" y="320" width="319" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="4OU-ad-eqw"/>
                                 </constraints>
@@ -95,13 +106,17 @@
                             <constraint firstItem="p7h-ya-ekv" firstAttribute="top" secondItem="uEB-S6-HuN" secondAttribute="bottom" constant="4" id="22V-E0-Wp1"/>
                             <constraint firstItem="XYp-gt-P6U" firstAttribute="top" secondItem="hK3-5c-xfN" secondAttribute="bottom" constant="4" id="3Yj-tU-aGC"/>
                             <constraint firstItem="p7h-ya-ekv" firstAttribute="leading" secondItem="suv-xQ-gUw" secondAttribute="leadingMargin" constant="6" id="5ps-mA-lbO"/>
+                            <constraint firstAttribute="trailing" secondItem="xIg-Mc-NCZ" secondAttribute="trailing" id="7L8-q7-bT1"/>
+                            <constraint firstItem="xIg-Mc-NCZ" firstAttribute="top" secondItem="suv-xQ-gUw" secondAttribute="top" id="8ps-tS-NYj"/>
                             <constraint firstItem="D89-FB-fvn" firstAttribute="leading" secondItem="suv-xQ-gUw" secondAttribute="leading" id="Bk1-48-p0N"/>
+                            <constraint firstItem="D89-FB-fvn" firstAttribute="top" secondItem="xIg-Mc-NCZ" secondAttribute="bottom" id="COJ-Gw-sRw"/>
                             <constraint firstItem="hK3-5c-xfN" firstAttribute="trailing" secondItem="suv-xQ-gUw" secondAttribute="trailingMargin" id="Ju7-Qz-ker"/>
                             <constraint firstAttribute="trailingMargin" secondItem="D89-FB-fvn" secondAttribute="trailing" constant="-16" id="KUi-94-aGF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="uEB-S6-HuN" secondAttribute="trailing" constant="18" id="N9y-1d-Cgu"/>
                             <constraint firstItem="XYp-gt-P6U" firstAttribute="leading" secondItem="suv-xQ-gUw" secondAttribute="leadingMargin" constant="6" id="Sds-Tm-dBS"/>
                             <constraint firstItem="D89-FB-fvn" firstAttribute="top" secondItem="BAG-IF-stq" secondAttribute="bottom" id="Y54-gP-viL"/>
                             <constraint firstAttribute="trailingMargin" secondItem="p7h-ya-ekv" secondAttribute="trailing" constant="18" id="ZmH-Qq-rlz"/>
+                            <constraint firstItem="xIg-Mc-NCZ" firstAttribute="leading" secondItem="suv-xQ-gUw" secondAttribute="leading" id="ZpA-xG-fq3"/>
                             <constraint firstItem="uEB-S6-HuN" firstAttribute="leading" secondItem="suv-xQ-gUw" secondAttribute="leadingMargin" constant="6" id="eP4-Qm-HwJ"/>
                             <constraint firstItem="yif-oe-mfU" firstAttribute="leading" secondItem="suv-xQ-gUw" secondAttribute="leadingMargin" constant="6" id="g5l-bK-ai6"/>
                             <constraint firstItem="uEB-S6-HuN" firstAttribute="top" secondItem="yif-oe-mfU" secondAttribute="bottom" constant="4" id="hsf-5q-0ax"/>
@@ -136,14 +151,21 @@
                                     <segue destination="byb-dx-8ni" kind="presentation" id="cuV-tu-8vN"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2c-Xv-gFL">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7hc-GG-Okx">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2c-Xv-gFL">
+                                <rect key="frame" x="0.0" y="20" width="375" height="75"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="SwI-7n-Eva"/>
+                                    <constraint firstAttribute="height" constant="75" id="SwI-7n-Eva"/>
                                 </constraints>
                                 <attributedString key="attributedText">
-                                    <fragment content="9.23 Hz">
+                                    <fragment content="120.00 Hz">
                                         <attributes>
                                             <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" size="36" name="AvenirNext-Regular"/>
@@ -159,9 +181,11 @@
                                     <constraint firstAttribute="height" constant="30" id="bx8-L7-zae"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
-                                <state key="normal" title="Flash"/>
+                                <state key="normal" title="Flash">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
-                                    <action selector="FlashToggle:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cpp-Jm-fkg"/>
+                                    <action selector="toggleFlash:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Xp-kB-V4l"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -171,9 +195,14 @@
                             <constraint firstItem="NTJ-7H-QYI" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-10" id="0ta-Cd-CgN"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="NTJ-7H-QYI" secondAttribute="bottom" constant="10" id="C5O-cB-LWn"/>
                             <constraint firstItem="K2c-Xv-gFL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Fxf-KZ-feW"/>
+                            <constraint firstItem="NTJ-7H-QYI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GRh-fv-0Z5" secondAttribute="trailing" constant="200" id="HdA-Vc-SYT"/>
+                            <constraint firstAttribute="trailing" secondItem="7hc-GG-Okx" secondAttribute="trailing" id="N7h-Xr-dug"/>
                             <constraint firstItem="GRh-fv-0Z5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="auj-uD-FzB"/>
-                            <constraint firstItem="K2c-Xv-gFL" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="cZ9-vg-XMV"/>
+                            <constraint firstItem="K2c-Xv-gFL" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="cZ9-vg-XMV"/>
+                            <constraint firstItem="7hc-GG-Okx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="h8L-q2-WTi"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="GRh-fv-0Z5" secondAttribute="bottom" constant="10" id="nv5-GD-lCL"/>
+                            <constraint firstItem="K2c-Xv-gFL" firstAttribute="top" secondItem="7hc-GG-Okx" secondAttribute="bottom" id="qL9-kq-6Ne"/>
+                            <constraint firstItem="7hc-GG-Okx" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="u6D-We-5qR"/>
                             <constraint firstAttribute="trailing" secondItem="K2c-Xv-gFL" secondAttribute="trailing" id="wDg-RF-CTi"/>
                         </constraints>
                         <connections>
@@ -184,6 +213,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="tRU-NP-Ahp"/>
                     <connections>
+                        <outlet property="flashButton" destination="GRh-fv-0Z5" id="rAW-Wr-nHn"/>
                         <outlet property="hertzLabel" destination="K2c-Xv-gFL" id="NPG-hq-kif"/>
                         <outlet property="leftSwipeRecog" destination="5Ec-yW-E17" id="hcP-zf-Fo0"/>
                         <outlet property="panRecog" destination="pb9-wJ-OAG" id="HOK-Pd-hMb"/>
@@ -210,7 +240,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="56.5" y="39.5"/>
+            <point key="canvasLocation" x="55.200000000000003" y="39.130434782608695"/>
         </scene>
     </scenes>
 </document>

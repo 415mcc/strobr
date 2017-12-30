@@ -1,18 +1,18 @@
 //
 //  InfoViewController.swift
-//  LightFreeStroboscope
-//
-//  Created by Lincoln Roth on 9/9/17.
-//  Copyright © 2017 Lachlan McCarty. All rights reserved.
+//  Strobr
 //
 
 import UIKit
 
 class InfoViewController: UIViewController {
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
 

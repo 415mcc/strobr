@@ -1,206 +1,186 @@
 //
 //  ViewController.swift
-//  LightFreeStroboscope
-//
-//  Created by Lachlan McCarty on 9/8/17.
-//  Copyright © 2017 Lachlan McCarty. All rights reserved.
+//  Strobr
 //
 
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UIGestureRecognizerDelegate {
+class ViewController: UIViewController,
+    AVCaptureVideoDataOutputSampleBufferDelegate,
+    UIGestureRecognizerDelegate {
     
-    var refreshRate: Double = 10
-    var doneSlide = true
+    // Instance variables
+    
+    var refreshRate = 24.0
+    var isHz = true
+    var flashOn = false
+    var exposure = CMTime(value: 2, timescale: 1)
+
+    let captureSession = AVCaptureSession()
+    var formats: [AVCaptureDevice.Format]!
+    var range: (Double, Double)!
+    var previewLayer: AVCaptureVideoPreviewLayer!
+    let captureDevice = AVCaptureDevice.default(for: .video)!
+    
+    @IBOutlet weak var hertzLabel: UILabel!
+    @IBOutlet weak var flashButton: UIButton!
     @IBOutlet var leftSwipeRecog: UISwipeGestureRecognizer!
     @IBOutlet var rightSwipeRecog: UISwipeGestureRecognizer!
     @IBOutlet var panRecog: UIPanGestureRecognizer!
-    var isHz = true
-
-    @IBOutlet weak var rpmLabel: UILabel!
-    @IBOutlet weak var hertzLabel: UILabel!
     var lastDate = Date().timeIntervalSince1970
-    var oldtransy:Float = 0
-    var format240: AVCaptureDeviceFormat?
-    var captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) as AVCaptureDevice
-    var formatDef: AVCaptureDeviceFormat!
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
-
+    // Initialize camera and gesture recognizers
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        hertzLabel.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(userDidTapLabel(tapGestureRecognizer:)))
-        hertzLabel.addGestureRecognizer(tapGesture)
-        setupCameraSession()
-        self.view.layer.insertSublayer(previewLayer, at: 0)
-        cameraSession.startRunning()
-        changeRefresh(hertz: 10)
-    }
-
-    func userDidTapLabel(tapGestureRecognizer: UITapGestureRecognizer) {
-        isHz =  !isHz
-        updateLabels(hertz: refreshRate)
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         
+        setupCaptureSession()
+        captureSession.startRunning()
+        changeRefresh(hertz: refreshRate)
+        
+        hertzLabel.isUserInteractionEnabled = true
+        let labelTapGesture = UITapGestureRecognizer(target: self, action: #selector(userDidTapLabel(tap:)))
+        hertzLabel.addGestureRecognizer(labelTapGesture)
+        
+        let cameraTapGesture = UITapGestureRecognizer(target: self, action: #selector(userDidTapCamera(tap:)))
+        view.addGestureRecognizer(cameraTapGesture)
     }
     
-
-
-    @IBAction func rightSwipe(_ sender: UISwipeGestureRecognizer) {
-        changeRefresh(hertz: refreshRate * 2)
+    // Handle user interactions, including updating UI and camera configuration
+    
+    @objc func userDidTapLabel(tap: UITapGestureRecognizer) {
+        isHz = !isHz
+        updateHertzLabel()
+    }
+    
+    @objc func userDidTapCamera(tap: UITapGestureRecognizer) {
+        // get tap point in appropriate coordinates
+        let screenSize = previewLayer.bounds.size
+        let tapPoint = tap.location(in: view)
+        let x = tapPoint.y / screenSize.height
+        let y = 1.0 - tapPoint.x / screenSize.width
+        let focusPoint = CGPoint(x: x, y: y)
+        // set autofocus and exposure according to point
+        do {
+            try captureDevice.lockForConfiguration()
+            if captureDevice.isFocusPointOfInterestSupported == true {
+                captureDevice.focusPointOfInterest = focusPoint
+                captureDevice.focusMode = .continuousAutoFocus
+            }
+            captureDevice.exposurePointOfInterest = focusPoint
+            captureDevice.exposureMode = .autoExpose
+            usleep(400000) // hack to wait for exposure adjustment
+            exposure = CMTimeMultiplyByFloat64(captureDevice.exposureDuration, Float64(captureDevice.iso))
+            let duration = CMTimeMultiplyByFloat64(exposure, 1.0 / Float64(captureDevice.activeFormat.maxISO))
+            captureDevice.setExposureModeCustom(duration: duration, iso: captureDevice.activeFormat.maxISO)
+            captureDevice.unlockForConfiguration()
+        } catch let error as NSError {
+            NSLog("\(error), \(error.localizedDescription)")
+        }
     }
     
     @IBAction func leftSwipe(_ sender: UISwipeGestureRecognizer) {
         changeRefresh(hertz: refreshRate / 2)
     }
+    
+    @IBAction func rightSwipe(_ sender: UISwipeGestureRecognizer) {
+        changeRefresh(hertz: refreshRate * 2)
+    }
 
     @IBAction func panChangeRate(_ sender: UIPanGestureRecognizer) {
-        
-        let translation = sender.translation(in: self.view)
-        sender.setTranslation(CGPoint(), in: self.view)
-
-        let velocity = sender.velocity(in: self.view)
-        
-        changeRefresh(hertz: refreshRate + copysign(Double(Int(Double(translation.y) * Double(velocity.y) / 64)) / 100, -Double(translation.y)))
+        let velocity = sender.velocity(in: view)
+        changeRefresh(hertz: refreshRate - Double(velocity.y)/1000)
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return (gestureRecognizer == self.leftSwipeRecog || gestureRecognizer == self.rightSwipeRecog) && otherGestureRecognizer == self.panRecog
+        return (gestureRecognizer == leftSwipeRecog || gestureRecognizer == rightSwipeRecog) && otherGestureRecognizer == panRecog
     }
 
-    @IBAction func FlashToggle(_ sender: Any) {
+    @IBAction func toggleFlash(_ sender: UIButton) {
+        flashOn = !flashOn
         do {
-            try self.captureDevice.lockForConfiguration()
-            self.captureDevice.torchMode = self.captureDevice.torchMode == .on ? .off : .on
-            self.captureDevice.unlockForConfiguration()
+            try captureDevice.lockForConfiguration()
+            captureDevice.torchMode = flashOn ? .on : .off
+            captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             NSLog("\(error), \(error.localizedDescription)")
         }
+        flashButton.setTitleColor(flashOn ? .yellow : .white, for: .normal)
     }
-
-
-    lazy var cameraSession: AVCaptureSession = {
-        let s = AVCaptureSession()
-        s.sessionPreset = AVCaptureSessionPresetHigh
-        
-        return s
-    }()
     
-    lazy var previewLayer: AVCaptureVideoPreviewLayer = {
-        let preview =  AVCaptureVideoPreviewLayer(session: self.cameraSession)
-        preview?.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
-        preview?.position = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
-        preview?.videoGravity = AVLayerVideoGravityResizeAspect
-        return preview!
-    }()
-    
-    func setupCameraSession() {
-        do {
-            formatDef = captureDevice.activeFormat
-            let deviceInput = try AVCaptureDeviceInput(device: captureDevice)
-            
-            cameraSession.beginConfiguration()
-            
-            if cameraSession.canAddInput(deviceInput) {
-                cameraSession.addInput(deviceInput)
-            }
-            
-            let dataOutput = AVCaptureVideoDataOutput()
-            dataOutput.videoSettings = [(kCVPixelBufferPixelFormatTypeKey as NSString) : NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarFullRange as UInt32)]
-            dataOutput.alwaysDiscardsLateVideoFrames = true
-            
-            if cameraSession.canAddOutput(dataOutput) {
-                cameraSession.addOutput(dataOutput)
-                let conn = dataOutput.connection(withMediaType: AVFoundation.AVMediaTypeVideo)
-                conn?.videoOrientation = .portrait
-                try captureDevice.lockForConfiguration()
-                for format in captureDevice.formats {
-                    let frmt = format as! AVCaptureDeviceFormat
-                    if (frmt.videoSupportedFrameRateRanges as! [AVFrameRateRange])[0].maxFrameRate == 120 && CMFormatDescriptionGetMediaSubType(frmt.formatDescription) == 875704422 {
-                        captureDevice.activeFormat = frmt
-                        formatDef = frmt
-                    } else if (frmt.videoSupportedFrameRateRanges as! [AVFrameRateRange])[0].maxFrameRate == 240 && CMFormatDescriptionGetMediaSubType(frmt.formatDescription) == 875704422 {
-                        format240 = frmt
-                    }
-                    
-                }
-                captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 800), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
-                captureDevice.activeVideoMaxFrameDuration = CMTimeMake(1, 6)
-                captureDevice.activeVideoMinFrameDuration = CMTimeMake(1, 6)
-                captureDevice.unlockForConfiguration()
-                
-            }
-            
-            cameraSession.commitConfiguration()
-            
-            let queue = DispatchQueue(label: "com.invasivecode.videoQueue")
-            dataOutput.setSampleBufferDelegate(self, queue: queue)
-            
+    func updateHertzLabel() {
+        if isHz {
+            hertzLabel.text = String(format: "%.2f Hz", refreshRate)
+        } else {
+            hertzLabel.text = String(format: "%.0f RPM", refreshRate*60)
         }
-        catch let error as NSError {
+    }
+    
+    // Camera setup and refresh rate changing code
+    
+    func setupCaptureSession() {
+        do {
+            captureSession.sessionPreset = .high
+            // get highest resolution formats in each frame rate range
+            formats = captureDevice.formats
+            for format in captureDevice.formats {
+                formats = formats.filter {
+                    getMinMaxFrameRate(format: format).1 != getMinMaxFrameRate(format: $0).1 ||
+                    CMVideoFormatDescriptionGetDimensions(format.formatDescription).height <=
+                        CMVideoFormatDescriptionGetDimensions($0.formatDescription).height &&
+                    Double(CMVideoFormatDescriptionGetDimensions($0.formatDescription).width) /
+                        Double(CMVideoFormatDescriptionGetDimensions($0.formatDescription).height) ==
+                        1920.0/1080.0
+                }
+            }
+            formats.sort { getMinMaxFrameRate(format: $0).1 < getMinMaxFrameRate(format: $1).1 }
+            range = (getMinMaxFrameRate(format: formats[0]).0,
+                getMinMaxFrameRate(format: formats[formats.count-1]).1)
+            // link capture device to capture session
+            captureSession.beginConfiguration()
+            let deviceInput = try AVCaptureDeviceInput(device: captureDevice)
+            captureSession.addInput(deviceInput)
+            captureSession.commitConfiguration()
+        } catch let error as NSError {
             NSLog("\(error), \(error.localizedDescription)")
         }
+        // setup view layer
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        view.layer.insertSublayer(previewLayer, at: 0)
+        previewLayer.frame = view.layer.frame
     }
     
     func changeRefresh(hertz: Double) {
-        let (min, max) = getMinMaxFrameRate()
-        var newHertz = hertz
-        if hertz <= min {
-            newHertz = min
-        } else if hertz >= max {
-            if format240 == nil {
-                newHertz = max
-            } else if hertz >= 240 {
-                newHertz = 240
-            }
-        }
-        
-        refreshRate = newHertz
-        updateLabels(hertz: newHertz)
+        let newRefreshRate = min(max(hertz, range.0), range.1)
         do {
             try captureDevice.lockForConfiguration()
-            if captureDevice.activeFormat == formatDef && newHertz > 120 {
-                captureDevice.activeFormat = format240
-            } else if captureDevice.activeFormat == format240 && newHertz <= 120 {
-                captureDevice.activeFormat = formatDef
-            }
-            captureDevice.setExposureModeCustomWithDuration(CMTimeMake(1, 800), iso: captureDevice.activeFormat.maxISO, completionHandler: nil)
-            captureDevice.activeVideoMaxFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
-            captureDevice.activeVideoMinFrameDuration = CMTimeMake(100, Int32(newHertz * 100))
+            // choose format
+            captureDevice.activeFormat = formats.first(
+                where: { newRefreshRate <= getMinMaxFrameRate(format: $0).1 } )!
+            // update torch
+            captureDevice.torchMode = flashOn ? .on : .off
+            // update exposure
+            let duration = CMTimeMultiplyByFloat64(exposure, 1.0 / Float64(captureDevice.activeFormat.maxISO))
+            captureDevice.setExposureModeCustom(duration: duration, iso: captureDevice.activeFormat.maxISO)
+            // update frame rate
+            captureDevice.activeVideoMaxFrameDuration = CMTimeMake(1000, Int32(newRefreshRate * 1000))
+            captureDevice.activeVideoMinFrameDuration = CMTimeMake(1000, Int32(newRefreshRate * 1000))
             captureDevice.unlockForConfiguration()
-        }
-        catch let error as NSError {
+        } catch let error as NSError {
             NSLog("\(error), \(error.localizedDescription)")
         }
+        refreshRate = newRefreshRate
+        updateHertzLabel()
     }
     
-    func getMinMaxFrameRate() -> (Double, Double) {
-        let minandmax = formatDef.videoSupportedFrameRateRanges[0] as? AVFrameRateRange
-        return ((minandmax?.minFrameRate)!, (minandmax?.maxFrameRate)!)
+    func getMinMaxFrameRate(format: AVCaptureDevice.Format) -> (Double, Double) {
+        let minandmax = format.videoSupportedFrameRateRanges[0] as AVFrameRateRange
+        return (minandmax.minFrameRate, minandmax.maxFrameRate)
     }
-    
-    func updateLabels(hertz: Double) {
-        if isHz{
-            hertzLabel.text = String(format: "%.2f Hz", hertz)
-
-        } else {
-            hertzLabel.text = String(format: "%.2f RPM", hertz*60)
-        }
-        
-    }
-    
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        // non-dropped frames
-        
-    }
-    
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didDrop sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        // dropped frames
-    }
-    
 }
 
