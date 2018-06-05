@@ -105,7 +105,9 @@ class ViewController: UIViewController,
         flashOn = !flashOn
         do {
             try captureDevice.lockForConfiguration()
-            captureDevice.torchMode = flashOn ? .on : .off
+            if (!isIpad() && captureDevice.hasTorch) {
+                captureDevice.torchMode = flashOn ? .on : .off
+            }
             captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             NSLog("\(error), \(error.localizedDescription)")
@@ -163,7 +165,9 @@ class ViewController: UIViewController,
             captureDevice.activeFormat = formats.first(
                 where: { newRefreshRate <= getMinMaxFrameRate(format: $0).1 } )!
             // update torch
-            captureDevice.torchMode = flashOn ? .on : .off
+            if (!isIpad() && captureDevice.hasTorch) {
+                captureDevice.torchMode = flashOn ? .on : .off
+            }
             // update exposure
             let duration = CMTimeMultiplyByFloat64(exposure, 1.0 / Float64(captureDevice.activeFormat.maxISO))
             captureDevice.setExposureModeCustom(duration: duration, iso: captureDevice.activeFormat.maxISO)
@@ -181,6 +185,10 @@ class ViewController: UIViewController,
     func getMinMaxFrameRate(format: AVCaptureDevice.Format) -> (Double, Double) {
         let minandmax = format.videoSupportedFrameRateRanges[0] as AVFrameRateRange
         return (minandmax.minFrameRate, minandmax.maxFrameRate)
+    }
+    
+    func isIpad() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 
